@@ -97,9 +97,11 @@ async def get_collection_lists(ctx, collectionLink):
             
             workshop_str += workshopID.rstrip() + ';'
             mod_str += modID.rstrip() + ';'
+            
+            final_str = '```Workshop ID List:\n' + workshop_str + '\n\n\nMod ID List:\n' + mod_str+'```'
         
         # Send lists as a text file if they exceed the discord maximum character limit
-        if(len(workshop_str) + len(mod_str) > 1998):
+        if(len(final_str) >= 2000):
             tempfpath = 'Project Zomboid Mod Collector\\' + getID_from_link(collectionLink) + '.txt'
             
             with open(tempfpath, 'w') as tempf:
@@ -109,7 +111,7 @@ async def get_collection_lists(ctx, collectionLink):
             await ctx.send(file=discord.File(tempfpath), content='List length exceeds 2000 characters, had to send as text file:')
             os.remove(tempfpath)
                 
-        else: await ctx.send('```Workshop ID List:\n' + workshop_str + '\n\n\nMod ID List:\n' + mod_str+'```')
+        else: await ctx.send(final_str)
             
     except Exception:
         traceback.print_exc()
